@@ -23,7 +23,7 @@ const corsOptions = {
     "Date",
     "X-Api-Version",
   ],
-   optionsSuccessStatus: 200,
+  optionsSuccessStatus: 200,
   credentials: true,
 };
 
@@ -42,5 +42,5 @@ app.get("/", (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}. All Set`);
 });
