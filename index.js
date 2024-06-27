@@ -23,6 +23,7 @@ const corsOptions = {
     "Date",
     "X-Api-Version",
   ],
+   optionsSuccessStatus: 200,
   credentials: true,
 };
 
