@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { Booking, User } = require("../models/associations");
 const moment = require("moment");
+const { body, validationResult } = require("express-validator");
 
 // @desc    Fetch all bookings
 // @route   GET /api/bookings
@@ -67,29 +68,49 @@ const getBooking = asyncHandler(async (req, res) => {
 // @desc    Create a booking
 // @route   POST /api/bookings
 // @access  Private
-const createBooking = asyncHandler(async (req, res) => {
-  try {
-    const bookingData = {
-      date: req.body.date,
-      endDate: req.body.endDate,
-      userId: req.body.userId,
-      sport: req.body.sport,
-      turfId: req.body.turfId,
-      cost: req.body.cost,
-      status: req.body.status,
-      timeSlots: req.body.timeSlots,
-    };
+const createBooking = [
+  // body("date").isISO8601().withMessage("Invalid date format"),
+  // body("endDate").isISO8601().withMessage("Invalid end date format"),
+  // body("userId").isInt().withMessage("Invalid user ID"),
+  // body("sport").isString().withMessage("Invalid sport"),
+  // body("turfId").isInt().withMessage("Invalid turf ID"),
+  // body("cost").isFloat().withMessage("Invalid cost"),
+  // body("status").isString().withMessage("Invalid status"),
+  // body("timeSlots").isArray().withMessage("Invalid time slots"),
 
-    // Create a booking
-    const booking = await Booking.create(bookingData);
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    // Respond with the created booking
-    res.status(201).json(booking);
-  } catch (error) {
-    res.status(400);
-    throw new Error("Error creating booking");
-  }
-});
+    try {
+      const bookingData = {
+        date: req.body.date,
+        endDate: req.body.endDate,
+        userId: req.body.userId,
+        sport: req.body.sport,
+        turfId: req.body.turfId,
+        cost: req.body.cost,
+        status: req.body.status,
+        timeSlots: req.body.timeSlots,
+      };
+
+      console.log("Creating booking...", bookingData);
+
+      // Create a booking
+      const booking = await Booking.create(bookingData);
+
+      // Respond with the created booking
+      res.status(201).json(booking);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      res
+        .status(400)
+        .json({ message: "Error creating booking", error: error.message });
+    }
+  }),
+];
 
 // @desc    Update a booking
 // @route   PUT /api/bookings/:id
