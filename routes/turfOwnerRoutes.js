@@ -42,12 +42,12 @@ router.route("/login").post((req, res) => {
   turfOwnerLogin(req, res);
 });
 
-router.route("/addTurf/:id").put((req, res) => {
+router.route("/:ownerId/addTurf/:turfId").put((req, res) => {
   console.log("Add turf API is running....");
   addTurfToTurfOwner(req, res);
 });
 
-router.route("/removeTurf/:id").put((req, res) => {
+router.route("/:ownerId/removeTurf/:turfId").put((req, res) => {
   console.log("Remove turf API is running....");
   removeTurfFromTurfOwner(req, res);
 });

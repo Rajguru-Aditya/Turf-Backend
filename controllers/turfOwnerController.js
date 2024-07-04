@@ -106,10 +106,10 @@ const updateTurfOwner = asyncHandler(async (req, res) => {
 });
 
 // @desc add turf to turf owner
-// @route PUT /api/turfOwner/addTurf/:id
+// @route PUT /api/turfOwner/:ownerId/addTurf/:turfId
 // @access Private/Admin
 const addTurfToTurfOwner = asyncHandler(async (req, res) => {
-  const turfOwnerId = req.params.id;
+  const turfOwnerId = req.params.ownerId;
 
   const decoded = decodeToken(req.headers.authorization.split(" ")[1]);
 
@@ -117,7 +117,7 @@ const addTurfToTurfOwner = asyncHandler(async (req, res) => {
 
   if (turfOwner) {
     if (decoded.id !== turfOwner.id) {
-      const turfId = req.body.turfId;
+      const turfId = req.params.turfId;
       turfOwner.turfIds.push(turfId);
       const updatedTurfOwner = await turfOwner.update({
         turfIds: turfOwner.turfIds,
@@ -134,10 +134,10 @@ const addTurfToTurfOwner = asyncHandler(async (req, res) => {
 });
 
 // @desc remove turf from turf owner
-// @route PUT /api/turfOwner/removeTurf/:id
+// @route PUT /api/turfOwner/:ownerId/removeTurf/:turfId
 // @access Private/Admin
 const removeTurfFromTurfOwner = asyncHandler(async (req, res) => {
-  const turfOwnerId = req.params.id;
+  const turfOwnerId = req.params.ownerId;
 
   const decoded = decodeToken(req.headers.authorization.split(" ")[1]);
 
@@ -145,7 +145,7 @@ const removeTurfFromTurfOwner = asyncHandler(async (req, res) => {
 
   if (turfOwner) {
     if (decoded.id !== turfOwner.id) {
-      const turfId = req.body.turfId;
+      const turfId = req.params.turfId;
       _.remove(turfOwner.turfIds, (id) => id === turfId);
       const updatedTurfOwner = await turfOwner.update({
         turfIds: turfOwner.turfIds,
