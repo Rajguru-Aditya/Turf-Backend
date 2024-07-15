@@ -155,7 +155,7 @@ const userLogin = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      address: user.address,
+      pincode: user.pincode,
       city: user.city,
       state: user.state,
       token: jwt.sign(
