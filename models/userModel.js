@@ -14,9 +14,9 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    address: {
+    pincode: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     city: {
       type: DataTypes.STRING,
@@ -42,16 +42,7 @@ const User = sequelize.define(
     },
   },
   {
-    indexes: [
-      {
-        unique: true,
-        fields: ["email"],
-      },
-      {
-        unique: true,
-        fields: ["phone"],
-      },
-    ],
+    indexes: [],
   }
 );
 

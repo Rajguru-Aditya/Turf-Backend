@@ -3,6 +3,50 @@ const Turf = require("../models/turfModel");
 const _ = require("lodash");
 const { Op, literal } = require("sequelize");
 
+const validateTurfData = (turfData) => {
+  if (_.isEmpty(turfData)) {
+    return { message: "Turf data is required" };
+  }
+
+  if (!turfData.ownerId) {
+    return { message: "Owner ID is required" };
+  }
+
+  switch (turfData) {
+    case !turfData.name:
+      return { message: "Name is required" };
+    case !turfData.address:
+      return { message: "Address is required" };
+    case !turfData.city:
+      return { message: "City is required" };
+    case !turfData.pincode:
+      return { message: "Pincode is required" };
+    case !turfData.state:
+      return { message: "State is required" };
+    case !turfData.sports:
+      return { message: "Sports is required" };
+    case !turfData.availableSports:
+      return { message: "Available sports is required" };
+    case !turfData.capacity:
+      return { message: "Capacity is required" };
+    case !turfData.days:
+      return { message: "Days is required" };
+    case !turfData.timings:
+      return { message: "Timings is required" };
+    case !turfData.images:
+      return { message: "Images is required" };
+    case !turfData.paymentInfo:
+      return { message: "Payment info is required" };
+    case !turfData.status:
+      return { message: "Status is required" };
+    case !turfData.rating:
+      return { message: "Rating is required" };
+
+    default:
+      return null;
+  }
+};
+
 // @desc    Fetch all turfs
 // @route   GET /api/turfs
 // @access  Public
@@ -58,6 +102,29 @@ const getTurfsByCityStateSport = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Fetch all turfs by pincode
+// @route   GET /api/turfs/pincode/:pincode
+// @access  Public
+const getTurfsByPincode = asyncHandler(async (req, res) => {
+  try {
+    console.log("Fetching turfs by pincode...");
+    const pincode = req.params.pincode;
+    const turfs = await Turf.findAll({
+      where: {
+        pincode: pincode,
+      },
+    });
+    if (_.isEmpty(turfs)) {
+      res.status(404).json({ message: "No turfs found" });
+      return;
+    }
+    res.json(turfs);
+  } catch (error) {
+    console.error("Error fetching turfs: ", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // @desc    Fetch single turf
 // @route   GET /api/turfs/:id
 // @access  Public
@@ -83,6 +150,7 @@ const createTurf = asyncHandler(async (req, res) => {
       name: req.body.name,
       address: req.body.address,
       city: req.body.city,
+      pincode: req.body.pincode,
       state: req.body.state,
       sports: req.body.sports,
       availableSports: req.body.availableSports,
@@ -100,8 +168,19 @@ const createTurf = asyncHandler(async (req, res) => {
 
     console.log("Turf data:", turfData);
 
+    // Validate the turf data
+    const validationError = validateTurfData(turfData);
+    if (validationError) {
+      res.status(400).json(validationError);
+      return;
+    }
+
     // Create the turf in the database
     const createdTurf = await Turf.create(turfData);
+
+    if (!createdTurf) {
+      res.status(400).json({ message: "Error creating turf" });
+    }
 
     // Respond with the created turf
     res.status(201).json(createdTurf);
@@ -127,6 +206,7 @@ const updateTurf = asyncHandler(async (req, res) => {
       ownerId: req.body.ownerId || turfData.ownerId,
       name: req.body.name || turfData.name,
       address: req.body.address || turfData.address,
+      pincode: req.body.pincode || turfData.pincode,
       city: req.body.city || turfData.city,
       state: req.body.state || turfData.state,
       sports: req.body.sports || turfData.sports,
@@ -181,6 +261,7 @@ const deleteTurf = asyncHandler(async (req, res) => {
 module.exports = {
   getTurfs,
   getTurfsByCityStateSport,
+  getTurfsByPincode,
   getTurf,
   createTurf,
   updateTurf,

@@ -17,9 +17,9 @@ const TurfOwner = sequelize.define("TurfOwner", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  address: {
+  pincode: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   city: {
     type: DataTypes.STRING,

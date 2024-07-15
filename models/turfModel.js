@@ -22,9 +22,13 @@ const Turf = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    pincode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     city: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: DataTypes.STRING,
@@ -49,30 +53,37 @@ const Turf = sequelize.define(
     },
     equipments: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     days: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     timings: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     rules: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     images: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     paymentInfo: {
       type: DataTypes.JSON,
+      defaultValue: [],
       allowNull: false,
     },
     status: {
       type: DataTypes.STRING,
+      defaultValue: "active",
       allowNull: false,
     },
     rating: {

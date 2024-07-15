@@ -7,6 +7,7 @@ const {
   updateTurf,
   deleteTurf,
   getTurfsByCityStateSport,
+  getTurfsByPincode,
 } = require("../controllers/turfController");
 
 // TODO: Add validateTokenHandler middleware
@@ -18,5 +19,6 @@ const {
 router.route("/").get(getTurfs).post(createTurf);
 router.route("/filter").get(getTurfsByCityStateSport);
 router.route("/:id").get(getTurf).put(updateTurf).delete(deleteTurf);
+router.route("/pincode/:pincode").get(getTurfsByPincode);
 
 module.exports = router;
