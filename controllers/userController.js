@@ -22,7 +22,7 @@ const createUser = asyncHandler(async (req, res) => {
       email: req.body.email,
       phone: req.body.phone,
       password: hashedPassword,
-      address: req.body.address,
+      pincode: req.body.pincode,
       city: req.body.city,
       state: req.body.state,
     };
