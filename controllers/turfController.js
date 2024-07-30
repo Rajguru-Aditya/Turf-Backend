@@ -258,6 +258,71 @@ const deleteTurf = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Block slots of a turf
+// @route POST /api/turfs/:id/block
+// @access Private/Admin
+const blockTurfSlots = asyncHandler(async (req, res) => {
+  // get the turf id from the request parameters
+  const turfId = req.params.id;
+  const date = req.body.date;
+  const slots = req.body.slots;
+
+  const blocked = {
+    date: date,
+    slots: slots,
+  };
+
+  // Fetch the turf from the database
+  const turf = await Turf.findByPk(turfId);
+
+  // Update the turf in the database
+  // First check if the date is already blocked
+  const blockedSlots = turf.blockedSlots || [];
+  const existingBlockedDate = _.find(blockedSlots, { date: date });
+
+  if (existingBlockedDate) {
+    // If the date is already blocked, update the slots
+    existingBlockedDate.slots = existingBlockedDate.slots.concat(slots);
+  } else {
+    // If the date is not blocked, add the date
+    blockedSlots.push(blocked);
+  }
+
+  const updatedTurf = await Turf.update(
+    {
+      blockedSlots: blockedSlots,
+    },
+    {
+      where: {
+        id: turfId,
+      },
+    }
+  );
+
+  // Respond with the updated turf
+  res.status(200).json({
+    updated: updatedTurf,
+    message: "Turf slots updated successfully",
+    data: turf,
+  });
+});
+
+// @desc    Fetch blocked slots of a turf
+// @route   GET /api/turfs/:id/block
+// @access  Private/Admin
+const getBlockedSlots = asyncHandler(async (req, res) => {
+  // get the turf id from the request parameters
+  const turfId = req.params.id;
+
+  // Fetch the turf from the database
+  const turf = await Turf.findByPk(turfId);
+
+  // Respond with the blocked slots
+  res.status(200).json({
+    blockedSlots: turf.blockedSlots,
+  });
+});
+
 module.exports = {
   getTurfs,
   getTurfsByCityStateSport,
@@ -266,4 +331,6 @@ module.exports = {
   createTurf,
   updateTurf,
   deleteTurf,
+  blockTurfSlots,
+  getBlockedSlots,
 };

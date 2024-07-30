@@ -8,6 +8,8 @@ const {
   deleteTurf,
   getTurfsByCityStateSport,
   getTurfsByPincode,
+  blockTurfSlots,
+  getBlockedSlots,
 } = require("../controllers/turfController");
 
 // TODO: Add validateTokenHandler middleware
@@ -20,5 +22,6 @@ router.route("/").get(getTurfs).post(createTurf);
 router.route("/filter").get(getTurfsByCityStateSport);
 router.route("/:id").get(getTurf).put(updateTurf).delete(deleteTurf);
 router.route("/pincode/:pincode").get(getTurfsByPincode);
+router.route("/:id/block").get(getBlockedSlots).post(blockTurfSlots);
 
 module.exports = router;

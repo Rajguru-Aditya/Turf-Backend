@@ -86,6 +86,10 @@ const Turf = sequelize.define(
       defaultValue: "active",
       allowNull: false,
     },
+    blockedSlots:{
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
